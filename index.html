@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>📐 Inverse Trig & Composite Derivatives - رياضيات 12 متقدم | Mr. Mohammed Hesham</title>
+<meta name="description" content="امتحان تفاعلي عن مشتقات الدوال المثلثية العكسية والمركبة - رياضيات 12 متقدم">
+<meta name="author" content="Mr. Mohammed Hesham">
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;900&family=Inter:wght@400;600;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+<style>
+body { font-family: 'Cairo', sans-serif; background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%); }
+body.en-mode { font-family: 'Inter', sans-serif; }
+.arabic-math { font-family: 'Amiri', 'Cairo', serif; }
+.correct { background-color: #dcfce7 !important; border-color: #16a34a !important; }
+.incorrect { background-color: #fee2e2 !important; border-color: #dc2626 !important; }
+.timer-warning { color: #dc2626 !important; animation: pulse 1s infinite; }
+@keyframes pulse { 50% { opacity: 0.7; } }
+@media print { .no-print { display: none !important; } }
+.success-badge { display: inline-block; padding: 4px 12px; border-radius: 20px; font-weight: bold; font-size: 0.875rem; }
+.grade-excellent { background: #dcfce7; color: #166534; }
+.grade-good { background: #fef3c7; color: #92400e; }
+.grade-pass { background: #dbeafe; color: #1e40af; }
+.grade-fail { background: #fee2e2; color: #991b1b; }
+.lang-switch { position: fixed; top: 16px; left: 16px; z-index: 100; background: white; padding: 6px; border-radius: 30px; box-shadow: 0 4px 15px rgba(0,0,0,0.15); display: flex; gap: 4px; border: 2px solid #d97706; }
+[dir="ltr"] .lang-switch { left: auto; right: 16px; }
+.lang-btn { padding: 6px 14px; border-radius: 20px; cursor: pointer; font-weight: bold; transition: all 0.3s; border: none; font-size: 0.875rem; background: transparent; color: #6b7280; }
+.lang-btn.active { background: #d97706; color: white; box-shadow: 0 2px 6px rgba(217,119,6,0.4); }
+.shuffle-badge { display: inline-block; background: linear-gradient(135deg, #d97706, #b45309); color: white; padding: 4px 12px; border-radius: 20px; font-size: 0.75rem; font-weight: bold; margin-right: 8px; }
+.math-display { display: inline-block; direction: ltr; font-family: 'Amiri', serif; font-size: 1.2em; padding: 2px 8px; background: #fef3c7; border-radius: 6px; margin: 2px; color: #92400e; font-weight: 600; }
+.save-indicator { position: fixed; bottom: 20px; left: 20px; z-index: 200; background: #10b981; color: white; padding: 8px 16px; border-radius: 20px; font-size: 0.8rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; pointer-events: none; }
+.save-indicator.show { opacity: 1; }
+.formula-box { background: #fef3c7; border: 2px solid #f59e0b; border-radius: 8px; padding: 12px; margin: 10px 0; font-family: 'Amiri', serif; direction: ltr; text-align: center; }
+.svg-graph { display: block; margin: 12px auto; background: white; border: 2px solid #e5e7eb; border-radius: 12px; padding: 8px; }
+.graph-container { text-align: center; margin: 10px 0; }
+.module-badge { display: inline-block; padding: 4px 16px; border-radius: 20px; font-weight: bold; font-size: 0.85rem; margin-bottom: 8px; }
+.module-1 { background: #fef3c7; color: #92400e; }
+.module-2 { background: #dbeafe; color: #1e40af; }
+.module-3 { background: #fce7f3; color: #9f1239; }
+.module-4 { background: #ecfdf5; color: #065f46; }
+.module-5 { background: #ede9fe; color: #5b21b6; }
+.module-6 { background: #fee2e2; color: #991b1b; }
+</style>
+</head>
+<body class="p-4 md:p-8 min-h-screen">
+
+<div class="lang-switch no-print">
+<button class="lang-btn active" onclick="setLanguage('ar')" id="btn-ar">عربي</button>
+<button class="lang-btn" onclick="setLanguage('en')" id="btn-en">EN</button>
+</div>
+
+<div id="saveIndicator" class="save-indicator">💾 <span data-ar="تم الحفظ" data-en="Saved">تم الحفظ</span></div>
+
+<div id="timer-container" class="max-w-5xl mx-auto mb-4 text-center no-print">
+<div class="bg-white p-4 rounded-2xl shadow-lg inline-block border-2 border-amber-100">
+<span class="text-gray-600 ml-2">⏰ الوقت المتبقي:</span>
+<span id="timer" class="text-2xl font-bold text-amber-700 font-mono">75:00</span>
+<span class="shuffle-badge">📐 Inverse Trig Derivatives - 30 سؤال</span>
+</div>
+</div>
+
+<div class="max-w-5xl mx-auto mb-6 flex flex-wrap gap-3 justify-center no-print">
+<button onclick="toggleAnswers()" class="bg-amber-700 hover:bg-amber-800 text-white px-5 py-2 rounded-xl font-medium transition shadow">👀 إظهار/إخفاء الإجابات</button>
+<button onclick="window.print()" class="bg-gray-700 hover:bg-gray-900 text-white px-5 py-2 rounded-xl font-medium transition shadow">🖨️ طباعة</button>
+<button onclick="reshuffleExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white px-5 py-2 rounded-xl font-medium transition shadow">🔄 أسئلة جديدة</button>
+<button onclick="clearProgress()" class="bg-red-500 hover:bg-red-600 text-white px-5 py-2 rounded-xl font-medium transition shadow">🗑️ مسح التقدم</button>
+</div>
+
+<header class="max-w-5xl mx-auto bg-white p-8 rounded-3xl shadow-2xl mb-8 border-4 border-amber-500">
+<div class="text-center">
+<div class="inline-block bg-amber-700 text-white px-6 py-2 rounded-full text-sm font-bold mb-4">MATH 12 ADVANCED - QUESTION 19</div>
+<h1 class="text-3xl md:text-4xl font-bold text-gray-900 mb-4">📐 مشتقات الدوال المثلثية العكسية والمركبة</h1>
+<h2 class="text-xl text-amber-700 font-semibold mb-2">رياضيات 12 متقدم - تمارين 29-32</h2>
+<p class="text-gray-600 mb-4">Inverse Trigonometric & Composite Function Derivatives</p>
+<p class="text-sm text-green-600 font-semibold">💾 يتم حفظ تقدمك تلقائياً - 30 سؤالاً في 6 أقسام</p>
+</div>
+<div class="mt-6 flex flex-wrap justify-center gap-4 text-sm text-gray-600">
+<span>📅 التاريخ: <input type="text" id="examDate" class="border-b-2 border-amber-300 bg-transparent w-32 text-center"></span>
+<span>😊 الاسم: <input type="text" id="studentName" class="border-b-2 border-amber-300 bg-transparent w-40 text-center" placeholder="اكتب اسمك"></span>
+<span>🏫 الشعبة: <input type="text" id="studentClass" class="border-b-2 border-amber-300 bg-transparent w-32 text-center" placeholder="الشعبة"></span>
+<span>⏰ المدة: 75 دقيقة</span>
+<span>📊 المجموع: 100 درجة</span>
+</div>
+</header>
+
+<div class="max-w-5xl mx-auto mb-6 bg-white p-4 rounded-xl shadow-lg border-2 border-amber-200 no-print">
+<h3 class="font-bold text-lg mb-3 text-amber-800 text-center">📐 قوانين الاشتقاق الأساسية</h3>
+<div class="grid md:grid-cols-3 gap-3 text-sm">
+<div class="formula-box"><strong>d/dx[sin⁻¹(u)] = u'/√(1-u²)</strong></div>
+<div class="formula-box"><strong>d/dx[cos⁻¹(u)] = -u'/√(1-u²)</strong></div>
+<div class="formula-box"><strong>d/dx[tan⁻¹(u)] = u'/(1+u²)</strong></div>
+<div class="formula-box"><strong>d/dx[e^u] = e^u · u'</strong></div>
+<div class="formula-box"><strong>d/dx[√u] = u'/(2√u)</strong></div>
+<div class="formula-box"><strong>Chain Rule: [f(g(x))]' = f'(g(x))·g'(x)</strong></div>
+</div>
+</div>
+
+<main class="max-w-5xl mx-auto space-y-8" id="exam-content"></main>
+
+<div class="text-center no-print pb-8 mt-8">
+<button onclick="gradeExam()" class="bg-gradient-to-r from-amber-700 to-orange-600 hover:from-amber-800 hover:to-orange-700 text-white text-lg px-12 py-4 rounded-2xl font-bold shadow-xl transition transform hover:scale-105">🎯 صحح إجاباتي!</button>
+</div>
+
+<div id="results-panel" class="max-w-5xl mx-auto mt-8 bg-white p-8 rounded-3xl shadow-2xl border-4 border-amber-500 hidden no-print">
+<h2 class="text-3xl font-bold text-gray-900 mb-6 text-center">🏆 نتيجتك يا بطل! 🏆</h2>
+<div class="grid md:grid-cols-3 gap-4 mb-6">
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>😊 الاسم</p><p id="res-name" class="font-bold text-xl text-amber-700">-</p></div>
+<div class="bg-orange-50 p-4 rounded-xl text-center"><p>📅 التاريخ</p><p id="res-date" class="font-bold text-xl text-orange-700">-</p></div>
+<div class="bg-amber-50 p-4 rounded-xl text-center"><p>🌟 المجموع</p><p id="res-total" class="font-bold text-3xl text-amber-700">0 / 100</p></div>
+</div>
+<div class="text-center mb-6">
+<span id="success-badge" class="success-badge grade-excellent">-</span>
+<p id="success-percent" class="text-4xl font-bold text-amber-700 mt-2">0%</p>
+<p class="text-sm text-gray-500">نسبة النجاح</p>
+</div>
+<div class="bg-gray-50 p-6 rounded-xl mb-6">
+<h3 class="font-bold text-lg mb-4 text-gray-800">📊 أدائك في كل قسم:</h3>
+<div class="space-y-3" id="sections-performance"></div>
+</div>
+<div class="text-center">
+<button id="sendEmailBtn" onclick="sendResultsToEmail()" class="bg-gradient-to-r from-amber-700 to-orange-600 text-white text-lg px-8 py-3 rounded-2xl font-bold shadow-xl transition">📧 أرسل النتيجة للمعلم</button>
+<p id="emailStatus" class="text-sm mt-2 text-center font-medium"></p>
+</div>
+</div>
+
+<footer class="max-w-5xl mx-auto mt-10 mb-8 text-center text-gray-500 text-sm no-print">
+© Inverse Trig Derivatives - Grade 12 Advanced | Mr. Mohammed Hesham 📐
+</footer>
+
+<script>
+const PUBLIC_KEY = "Rb3Lq8tXaFmc5YHUH";
+const SERVICE_ID = "service_w15m64i";
+const TEMPLATE_ID = "template_5b0u2tq";
+const TARGET_EMAIL = "mohammedhesham872@gmail.com";
+emailjs.init(PUBLIC_KEY);
+
+const STORAGE_KEY = 'inverse_trig_derivatives_grade12_v1';
+const TOTAL_TIME = 4500;
+const TOTAL_QUESTIONS = 30;
+const TOTAL_SECTIONS = 6;
+const QUESTIONS_PER_SECTION = 5;
+
+let currentSeed = null;
+let answersVisible = false;
+let saveIndicatorTimeout = null;
+let currentLang = 'ar';
+let timeRemaining = TOTAL_TIME;
+let timerInterval;
+let examData;
+let correctAnswersMap = {};
+let rng = null;
+
+function mulberry32(a) {
+    return function() {
+        var t = a += 0x6D2B79F5;
+        t = Math.imul(t ^ t >>> 15, t | 1);
+        t ^= t + Math.imul(t ^ t >>> 7, t | 61);
+        return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    }
+}
+
+function showSaveIndicator() {
+    const indicator = document.getElementById('saveIndicator');
+    indicator.classList.add('show');
+    if (saveIndicatorTimeout) clearTimeout(saveIndicatorTimeout);
+    saveIndicatorTimeout = setTimeout(() => indicator.classList.remove('show'), 1500);
+}
+
+function saveState(showIndicator = true) {
+    try {
+        const state = {
+            seed: currentSeed, lang: currentLang,
+            studentName: document.getElementById('studentName').value,
+            studentClass: document.getElementById('studentClass').value,
+            examDate: document.getElementById('examDate').value,
+            answers: getSelectedAnswers(),
+            timeRemaining: timeRemaining,
+            answersVisible: answersVisible, savedAt: Date.now()
+        };
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+        if (showIndicator) showSaveIndicator();
+    } catch (e) { console.error('Save error:', e); }
+}
+
+function loadState() {
+    try {
+        const saved = localStorage.getItem(STORAGE_KEY);
+        return saved ? JSON.parse(saved) : null;
+    } catch (e) { return null; }
+}
+
+function getSelectedAnswers() {
+    const answers = {};
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const selected = document.querySelector('input[name="q'+i+'"]:checked');
+        if (selected) answers[i] = selected.value;
+    }
+    return answers;
+}
+
+function restoreAnswers(answers) {
+    if (!answers) return;
+    for (const [idx, val] of Object.entries(answers)) {
+        const radio = document.querySelector('input[name="q'+idx+'"][value="'+val+'"]');
+        if (radio) radio.checked = true;
+    }
+}
+
+function clearProgress() {
+    const msg = currentLang === 'ar' ? '⚠️ هل أنت متأكد من مسح كل التقدم؟' : '⚠️ Clear all progress?';
+    if (confirm(msg)) { localStorage.removeItem(STORAGE_KEY); location.reload(); }
+}
+
+function setupAnswerListeners() {
+    document.getElementById('exam-content').addEventListener('change', (e) => {
+        if (e.target.type === 'radio') saveState();
+    });
+}
+
+function setupInputListeners() {
+    ['studentName', 'studentClass', 'examDate'].forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.addEventListener('input', () => saveState(false));
+            el.addEventListener('blur', () => saveState());
+        }
+    });
+}
+
+// ==================== SVG DIAGRAMS ====================
+const svgGraphs = {
+    inverse_trig_formulas: `<svg class="svg-graph" width="400" height="280" viewBox="0 0 400 280" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="270" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">📐 مشتقات الدوال المثلثية العكسية</text>
+        <rect x="20" y="45" width="360" height="40" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">d/dx[sin⁻¹(u)] = u'/√(1-u²)</text>
+        <rect x="20" y="95" width="360" height="40" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="120" text-anchor="middle" font-size="12" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">d/dx[cos⁻¹(u)] = -u'/√(1-u²)</text>
+        <rect x="20" y="145" width="360" height="40" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="170" text-anchor="middle" font-size="12" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">d/dx[tan⁻¹(u)] = u'/(1+u²)</text>
+        <rect x="20" y="195" width="360" height="40" rx="6" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="220" text-anchor="middle" font-size="12" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">d/dx[e^u] = e^u · u'</text>
+        <rect x="20" y="245" width="360" height="25" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="262" text-anchor="middle" font-size="11" fill="#92400e">Chain Rule: Always multiply by u'(x)!</text>
+    </svg>`,
+    
+    exercise_29a: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#1e40af" font-weight="bold">📝 تمرين 29(a) - f(x) = sin⁻¹(x³+1)</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#1e40af" font-family="'Amiri', serif" font-weight="bold">f(x) = sin⁻¹(x³ + 1)</text>
+        <rect x="20" y="105" width="360" height="40" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="130" text-anchor="middle" font-size="11" fill="#1e40af">u = x³ + 1, u' = 3x²</text>
+        <rect x="20" y="155" width="360" height="40" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#1e40af">f'(x) = 3x²/√(1-(x³+1)²)</text>
+        <rect x="20" y="205" width="360" height="40" rx="6" fill="#bfdbfe" stroke="#2563eb" stroke-width="2"/>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#1e40af">= 3x²/√(-x⁶ - 2x³)</text>
+    </svg>`,
+    
+    exercise_29b: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fce7f3" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#9f1239" font-weight="bold">📝 تمرين 29(b) - f(x) = sin⁻¹(√x)</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#9f1239" font-family="'Amiri', serif" font-weight="bold">f(x) = sin⁻¹(√x) = sin⁻¹(x^(1/2))</text>
+        <rect x="20" y="105" width="360" height="40" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="130" text-anchor="middle" font-size="11" fill="#9f1239">u = √x, u' = 1/(2√x)</text>
+        <rect x="20" y="155" width="360" height="40" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#9f1239">f'(x) = [1/(2√x)]/√(1-x)</text>
+        <rect x="20" y="205" width="360" height="40" rx="6" fill="#fbcfe8" stroke="#ec4899" stroke-width="2"/>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#9f1239">= 1/(2√x·√(1-x)) = 1/(2√(x-x²))</text>
+    </svg>`,
+    
+    exercise_30a: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#ecfdf5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#065f46" font-weight="bold">📝 تمرين 30(a) - f(x) = cos⁻¹(x²+x)</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#065f46" font-family="'Amiri', serif" font-weight="bold">f(x) = cos⁻¹(x² + x)</text>
+        <rect x="20" y="105" width="360" height="40" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="130" text-anchor="middle" font-size="11" fill="#065f46">u = x² + x, u' = 2x + 1</text>
+        <rect x="20" y="155" width="360" height="40" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#065f46">f'(x) = -(2x+1)/√(1-(x²+x)²)</text>
+        <rect x="20" y="205" width="360" height="40" rx="6" fill="#d1fae5" stroke="#10b981" stroke-width="2"/>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#065f46">Note the NEGATIVE sign for cos⁻¹!</text>
+    </svg>`,
+    
+    exercise_31a: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#ede9fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#5b21b6" font-weight="bold">📝 تمرين 31(a) - f(x) = tan⁻¹(√x)</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#5b21b6" font-family="'Amiri', serif" font-weight="bold">f(x) = tan⁻¹(√x)</text>
+        <rect x="20" y="105" width="360" height="40" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="130" text-anchor="middle" font-size="11" fill="#5b21b6">u = √x, u' = 1/(2√x)</text>
+        <rect x="20" y="155" width="360" height="40" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#5b21b6">f'(x) = [1/(2√x)]/(1+x)</text>
+        <rect x="20" y="205" width="360" height="40" rx="6" fill="#ddd6fe" stroke="#7c3aed" stroke-width="2"/>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#5b21b6">= 1/(2√x(1+x))</text>
+    </svg>`,
+    
+    exercise_32b: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fee2e2" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#991b1b" font-weight="bold">📝 تمرين 32(b) - f(x) = e^(tan⁻¹x)</text>
+        <rect x="20" y="45" width="360" height="50" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="70" text-anchor="middle" font-size="12" fill="#991b1b" font-family="'Amiri', serif" font-weight="bold">f(x) = e^(tan⁻¹x)</text>
+        <rect x="20" y="105" width="360" height="40" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="130" text-anchor="middle" font-size="11" fill="#991b1b">u = tan⁻¹x, u' = 1/(1+x²)</text>
+        <rect x="20" y="155" width="360" height="40" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="180" text-anchor="middle" font-size="11" fill="#991b1b">f'(x) = e^(tan⁻¹x) · 1/(1+x²)</text>
+        <rect x="20" y="205" width="360" height="40" rx="6" fill="#fecaca" stroke="#dc2626" stroke-width="2"/>
+        <text x="200" y="230" text-anchor="middle" font-size="11" fill="#991b1b">= e^(tan⁻¹x)/(1+x²)</text>
+    </svg>`,
+    
+    chain_rule_visual: `<svg class="svg-graph" width="400" height="260" viewBox="0 0 400 260" xmlns="http://www.w3.org/2000/svg">
+        <rect x="5" y="5" width="390" height="250" rx="12" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="25" text-anchor="middle" font-size="14" fill="#92400e" font-weight="bold">⛓️ قاعدة السلسلة - Chain Rule</text>
+        <circle cx="100" cy="100" r="30" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="100" y="105" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Outer f</text>
+        <circle cx="300" cy="100" r="30" fill="#fde68a" stroke="#f59e0b" stroke-width="2"/>
+        <text x="300" y="105" text-anchor="middle" font-size="11" fill="#92400e" font-weight="bold">Inner g</text>
+        <line x1="130" y1="100" x2="270" y2="100" stroke="#dc2626" stroke-width="3" marker-end="url(#arrow1)"/>
+        <text x="200" y="90" text-anchor="middle" font-size="10" fill="#dc2626">f(g(x))</text>
+        <rect x="20" y="150" width="360" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="175" text-anchor="middle" font-size="12" fill="#92400e" font-family="'Amiri', serif" font-weight="bold">[f(g(x))]' = f'(g(x)) · g'(x)</text>
+        <rect x="20" y="200" width="360" height="40" rx="6" fill="#fef3c7" stroke="#f59e0b" stroke-width="2"/>
+        <text x="200" y="225" text-anchor="middle" font-size="11" fill="#92400e">Derivative of outer × Derivative of inner</text>
+        <defs><marker id="arrow1" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#dc2626"/></marker></defs>
+    </svg>`
+};
+
+// ==================== EXAM DATA - 30 QUESTIONS ====================
+const originalExamData = {
+    sections: [
+        {
+            id: 'sec1',
+            title: { ar: '🔹 القسم 1: تمرين 29 - sin⁻¹ (Q1-Q5)', en: '🔹 Section 1: Exercise 29 - sin⁻¹ (Q1-Q5)' },
+            questions: [
+                {
+                    q: { ar: '<strong>تمرين 29(a):</strong> f(x) = sin⁻¹(x³ + 1). ما قيمة f\'(x)؟', en: '<strong>Exercise 29(a):</strong> f(x) = sin⁻¹(x³ + 1). What is f\'(x)?' },
+                    svg: svgGraphs.exercise_29a,
+                    options: [
+                        { ar: '<span class="math-display">3x²/√(1-(x³+1)²)</span>', en: '<span class="math-display">3x²/√(1-(x³+1)²)</span>' },
+                        { ar: '<span class="math-display">3x²/√(1+(x³+1)²)</span>', en: '<span class="math-display">3x²/√(1+(x³+1)²)</span>' },
+                        { ar: '<span class="math-display">x²/√(1-(x³+1)²)</span>', en: '<span class="math-display">x²/√(1-(x³+1)²)</span>' },
+                        { ar: '<span class="math-display">3x²·√(1-(x³+1)²)</span>', en: '<span class="math-display">3x²·√(1-(x³+1)²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x³+1, u\' = 3x². f\'(x) = u\'/√(1-u²) = 3x²/√(1-(x³+1)²)', en: 'u = x³+1, u\' = 3x². f\'(x) = 3x²/√(1-(x³+1)²)' }
+                },
+                {
+                    q: { ar: '<strong>تمرين 29(b):</strong> f(x) = sin⁻¹(√x). ما قيمة f\'(x)؟', en: '<strong>Exercise 29(b):</strong> f(x) = sin⁻¹(√x). What is f\'(x)?' },
+                    svg: svgGraphs.exercise_29b,
+                    options: [
+                        { ar: '<span class="math-display">1/(2√x·√(1-x))</span>', en: '<span class="math-display">1/(2√x·√(1-x))</span>' },
+                        { ar: '<span class="math-display">1/(√x·√(1-x))</span>', en: '<span class="math-display">1/(√x·√(1-x))</span>' },
+                        { ar: '<span class="math-display">1/(2√(1-x))</span>', en: '<span class="math-display">1/(2√(1-x))</span>' },
+                        { ar: '<span class="math-display">√x/(2√(1-x))</span>', en: '<span class="math-display">√x/(2√(1-x))</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = √x, u\' = 1/(2√x). f\'(x) = [1/(2√x)]/√(1-x) = 1/(2√x·√(1-x))', en: 'u = √x, u\' = 1/(2√x). f\'(x) = 1/(2√x·√(1-x))' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(2x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(2x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2/√(1-4x²)</span>', en: '<span class="math-display">2/√(1-4x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-4x²)</span>', en: '<span class="math-display">1/√(1-4x²)</span>' },
+                        { ar: '<span class="math-display">2/√(1+4x²)</span>', en: '<span class="math-display">2/√(1+4x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 2x, u\' = 2. f\'(x) = 2/√(1-(2x)²) = 2/√(1-4x²)', en: 'f\'(x) = 2/√(1-4x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(x²). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(x²). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2x/√(1-x⁴)</span>', en: '<span class="math-display">2x/√(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">x/√(1-x⁴)</span>', en: '<span class="math-display">x/√(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">2x/√(1+x⁴)</span>', en: '<span class="math-display">2x/√(1+x⁴)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x⁴)</span>', en: '<span class="math-display">1/√(1-x⁴)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x², u\' = 2x. f\'(x) = 2x/√(1-x⁴)', en: 'f\'(x) = 2x/√(1-x⁴)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(3x+1). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(3x+1). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">3/√(1-(3x+1)²)</span>', en: '<span class="math-display">3/√(1-(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-(3x+1)²)</span>', en: '<span class="math-display">1/√(1-(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">3/√(1+(3x+1)²)</span>', en: '<span class="math-display">3/√(1+(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">(3x+1)/√(1-(3x+1)²)</span>', en: '<span class="math-display">(3x+1)/√(1-(3x+1)²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 3x+1, u\' = 3. f\'(x) = 3/√(1-(3x+1)²)', en: 'f\'(x) = 3/√(1-(3x+1)²)' }
+                }
+            ]
+        },
+        {
+            id: 'sec2',
+            title: { ar: '🔹 القسم 2: تمرين 30 - cos⁻¹ (Q6-Q10)', en: '🔹 Section 2: Exercise 30 - cos⁻¹ (Q6-Q10)' },
+            questions: [
+                {
+                    q: { ar: '<strong>تمرين 30(a):</strong> f(x) = cos⁻¹(x² + x). ما قيمة f\'(x)؟', en: '<strong>Exercise 30(a):</strong> f(x) = cos⁻¹(x² + x). What is f\'(x)?' },
+                    svg: svgGraphs.exercise_30a,
+                    options: [
+                        { ar: '<span class="math-display">-(2x+1)/√(1-(x²+x)²)</span>', en: '<span class="math-display">-(2x+1)/√(1-(x²+x)²)</span>' },
+                        { ar: '<span class="math-display">(2x+1)/√(1-(x²+x)²)</span>', en: '<span class="math-display">(2x+1)/√(1-(x²+x)²)</span>' },
+                        { ar: '<span class="math-display">-(2x+1)/√(1+(x²+x)²)</span>', en: '<span class="math-display">-(2x+1)/√(1+(x²+x)²)</span>' },
+                        { ar: '<span class="math-display">(2x+1)·√(1-(x²+x)²)</span>', en: '<span class="math-display">(2x+1)·√(1-(x²+x)²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x²+x, u\' = 2x+1. f\'(x) = -u\'/√(1-u²) = -(2x+1)/√(1-(x²+x)²)', en: 'f\'(x) = -(2x+1)/√(1-(x²+x)²) (note negative sign for cos⁻¹)' }
+                },
+                {
+                    q: { ar: '<strong>تمرين 30(b):</strong> f(x) = cos⁻¹(2/x). ما قيمة f\'(x)؟', en: '<strong>Exercise 30(b):</strong> f(x) = cos⁻¹(2/x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2/(x²√(1-4/x²))</span>', en: '<span class="math-display">2/(x²√(1-4/x²))</span>' },
+                        { ar: '<span class="math-display">-2/(x²√(1-4/x²))</span>', en: '<span class="math-display">-2/(x²√(1-4/x²))</span>' },
+                        { ar: '<span class="math-display">2/(x√(1-4/x²))</span>', en: '<span class="math-display">2/(x√(1-4/x²))</span>' },
+                        { ar: '<span class="math-display">-2/(x√(1-4/x²))</span>', en: '<span class="math-display">-2/(x√(1-4/x²))</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 2/x, u\' = -2/x². f\'(x) = -(-2/x²)/√(1-4/x²) = 2/(x²√(1-4/x²))', en: 'u = 2/x, u\' = -2/x². f\'(x) = 2/(x²√(1-4/x²))' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = cos⁻¹(3x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = cos⁻¹(3x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-3/√(1-9x²)</span>', en: '<span class="math-display">-3/√(1-9x²)</span>' },
+                        { ar: '<span class="math-display">3/√(1-9x²)</span>', en: '<span class="math-display">3/√(1-9x²)</span>' },
+                        { ar: '<span class="math-display">-3/√(1+9x²)</span>', en: '<span class="math-display">-3/√(1+9x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-9x²)</span>', en: '<span class="math-display">1/√(1-9x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 3x, u\' = 3. f\'(x) = -3/√(1-9x²)', en: 'f\'(x) = -3/√(1-9x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = cos⁻¹(x²). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = cos⁻¹(x²). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-2x/√(1-x⁴)</span>', en: '<span class="math-display">-2x/√(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">2x/√(1-x⁴)</span>', en: '<span class="math-display">2x/√(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">-x/√(1-x⁴)</span>', en: '<span class="math-display">-x/√(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">2x/√(1+x⁴)</span>', en: '<span class="math-display">2x/√(1+x⁴)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x², u\' = 2x. f\'(x) = -2x/√(1-x⁴)', en: 'f\'(x) = -2x/√(1-x⁴)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> ما الفرق بين مشتقة sin⁻¹ و cos⁻¹؟', en: '<strong>Similar:</strong> What is the difference between derivatives of sin⁻¹ and cos⁻¹?' },
+                    options: [
+                        { ar: 'مشتقة cos⁻¹ لها إشارة سالبة إضافية', en: 'cos⁻¹ derivative has an extra negative sign' },
+                        { ar: 'لا فرق', en: 'No difference' },
+                        { ar: 'مشتقة sin⁻¹ لها إشارة سالبة', en: 'sin⁻¹ derivative has negative sign' },
+                        { ar: 'كلاهما موجب', en: 'Both are positive' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'd/dx[cos⁻¹(u)] = -u\'/√(1-u²) بينما d/dx[sin⁻¹(u)] = u\'/√(1-u²)', en: 'cos⁻¹ has negative sign: -u\'/√(1-u²), while sin⁻¹ has u\'/√(1-u²)' }
+                }
+            ]
+        },
+        {
+            id: 'sec3',
+            title: { ar: '🔹 القسم 3: تمرين 31 - tan⁻¹ (Q11-Q15)', en: '🔹 Section 3: Exercise 31 - tan⁻¹ (Q11-Q15)' },
+            questions: [
+                {
+                    q: { ar: '<strong>تمرين 31(a):</strong> f(x) = tan⁻¹(√x). ما قيمة f\'(x)؟', en: '<strong>Exercise 31(a):</strong> f(x) = tan⁻¹(√x). What is f\'(x)?' },
+                    svg: svgGraphs.exercise_31a,
+                    options: [
+                        { ar: '<span class="math-display">1/(2√x(1+x))</span>', en: '<span class="math-display">1/(2√x(1+x))</span>' },
+                        { ar: '<span class="math-display">1/(√x(1+x))</span>', en: '<span class="math-display">1/(√x(1+x))</span>' },
+                        { ar: '<span class="math-display">1/(2√x(1-x))</span>', en: '<span class="math-display">1/(2√x(1-x))</span>' },
+                        { ar: '<span class="math-display">√x/(2(1+x))</span>', en: '<span class="math-display">√x/(2(1+x))</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = √x, u\' = 1/(2√x). f\'(x) = [1/(2√x)]/(1+x) = 1/(2√x(1+x))', en: 'u = √x, u\' = 1/(2√x). f\'(x) = 1/(2√x(1+x))' }
+                },
+                {
+                    q: { ar: '<strong>تمرين 31(b):</strong> f(x) = tan⁻¹(1/x). ما قيمة f\'(x)؟', en: '<strong>Exercise 31(b):</strong> f(x) = tan⁻¹(1/x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-1/(1+x²)</span>', en: '<span class="math-display">-1/(1+x²)</span>' },
+                        { ar: '<span class="math-display">1/(1+x²)</span>', en: '<span class="math-display">1/(1+x²)</span>' },
+                        { ar: '<span class="math-display">-1/(x²(1+1/x²))</span>', en: '<span class="math-display">-1/(x²(1+1/x²))</span>' },
+                        { ar: '<span class="math-display">1/x²</span>', en: '<span class="math-display">1/x²</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 1/x, u\' = -1/x². f\'(x) = (-1/x²)/(1+1/x²) = -1/(x²+1)', en: 'u = 1/x, u\' = -1/x². f\'(x) = -1/(1+x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = tan⁻¹(2x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = tan⁻¹(2x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2/(1+4x²)</span>', en: '<span class="math-display">2/(1+4x²)</span>' },
+                        { ar: '<span class="math-display">1/(1+4x²)</span>', en: '<span class="math-display">1/(1+4x²)</span>' },
+                        { ar: '<span class="math-display">2/(1-4x²)</span>', en: '<span class="math-display">2/(1-4x²)</span>' },
+                        { ar: '<span class="math-display">2x/(1+4x²)</span>', en: '<span class="math-display">2x/(1+4x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 2x, u\' = 2. f\'(x) = 2/(1+(2x)²) = 2/(1+4x²)', en: 'f\'(x) = 2/(1+4x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = tan⁻¹(x²). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = tan⁻¹(x²). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2x/(1+x⁴)</span>', en: '<span class="math-display">2x/(1+x⁴)</span>' },
+                        { ar: '<span class="math-display">x/(1+x⁴)</span>', en: '<span class="math-display">x/(1+x⁴)</span>' },
+                        { ar: '<span class="math-display">2x/(1-x⁴)</span>', en: '<span class="math-display">2x/(1-x⁴)</span>' },
+                        { ar: '<span class="math-display">1/(1+x⁴)</span>', en: '<span class="math-display">1/(1+x⁴)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x², u\' = 2x. f\'(x) = 2x/(1+x⁴)', en: 'f\'(x) = 2x/(1+x⁴)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = tan⁻¹(3x+1). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = tan⁻¹(3x+1). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">3/(1+(3x+1)²)</span>', en: '<span class="math-display">3/(1+(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">1/(1+(3x+1)²)</span>', en: '<span class="math-display">1/(1+(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">3/(1-(3x+1)²)</span>', en: '<span class="math-display">3/(1-(3x+1)²)</span>' },
+                        { ar: '<span class="math-display">(3x+1)/(1+(3x+1)²)</span>', en: '<span class="math-display">(3x+1)/(1+(3x+1)²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 3x+1, u\' = 3. f\'(x) = 3/(1+(3x+1)²)', en: 'f\'(x) = 3/(1+(3x+1)²)' }
+                }
+            ]
+        },
+        {
+            id: 'sec4',
+            title: { ar: '🔹 القسم 4: تمرين 32 - دوال مركبة (Q16-Q20)', en: '🔹 Section 4: Exercise 32 - Composite Functions (Q16-Q20)' },
+            questions: [
+                {
+                    q: { ar: '<strong>تمرين 32(a):</strong> f(x) = √(2 + tan⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Exercise 32(a):</strong> f(x) = √(2 + tan⁻¹x). What is f\'(x)?' },
+                    svg: svgGraphs.chain_rule_visual,
+                    options: [
+                        { ar: '<span class="math-display">1/(2(1+x²)√(2+tan⁻¹x))</span>', en: '<span class="math-display">1/(2(1+x²)√(2+tan⁻¹x))</span>' },
+                        { ar: '<span class="math-display">1/((1+x²)√(2+tan⁻¹x))</span>', en: '<span class="math-display">1/((1+x²)√(2+tan⁻¹x))</span>' },
+                        { ar: '<span class="math-display">1/(2√(2+tan⁻¹x))</span>', en: '<span class="math-display">1/(2√(2+tan⁻¹x))</span>' },
+                        { ar: '<span class="math-display">(1+x²)/(2√(2+tan⁻¹x))</span>', en: '<span class="math-display">(1+x²)/(2√(2+tan⁻¹x))</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 2+tan⁻¹x, u\' = 1/(1+x²). f\'(x) = u\'/(2√u) = 1/(2(1+x²)√(2+tan⁻¹x))', en: 'f\'(x) = 1/(2(1+x²)√(2+tan⁻¹x))' }
+                },
+                {
+                    q: { ar: '<strong>تمرين 32(b):</strong> f(x) = e^(tan⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Exercise 32(b):</strong> f(x) = e^(tan⁻¹x). What is f\'(x)?' },
+                    svg: svgGraphs.exercise_32b,
+                    options: [
+                        { ar: '<span class="math-display">e^(tan⁻¹x)/(1+x²)</span>', en: '<span class="math-display">e^(tan⁻¹x)/(1+x²)</span>' },
+                        { ar: '<span class="math-display">e^(tan⁻¹x)·(1+x²)</span>', en: '<span class="math-display">e^(tan⁻¹x)·(1+x²)</span>' },
+                        { ar: '<span class="math-display">e^(tan⁻¹x)</span>', en: '<span class="math-display">e^(tan⁻¹x)</span>' },
+                        { ar: '<span class="math-display">1/(1+x²)</span>', en: '<span class="math-display">1/(1+x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = tan⁻¹x, u\' = 1/(1+x²). f\'(x) = e^u · u\' = e^(tan⁻¹x)/(1+x²)', en: 'f\'(x) = e^(tan⁻¹x)/(1+x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = e^(sin⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = e^(sin⁻¹x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">e^(sin⁻¹x)/√(1-x²)</span>', en: '<span class="math-display">e^(sin⁻¹x)/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">e^(sin⁻¹x)·√(1-x²)</span>', en: '<span class="math-display">e^(sin⁻¹x)·√(1-x²)</span>' },
+                        { ar: '<span class="math-display">e^(sin⁻¹x)</span>', en: '<span class="math-display">e^(sin⁻¹x)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = sin⁻¹x, u\' = 1/√(1-x²). f\'(x) = e^(sin⁻¹x)/√(1-x²)', en: 'f\'(x) = e^(sin⁻¹x)/√(1-x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = √(1 + cos⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = √(1 + cos⁻¹x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-1/(2√(1-x²)·√(1+cos⁻¹x))</span>', en: '<span class="math-display">-1/(2√(1-x²)·√(1+cos⁻¹x))</span>' },
+                        { ar: '<span class="math-display">1/(2√(1-x²)·√(1+cos⁻¹x))</span>', en: '<span class="math-display">1/(2√(1-x²)·√(1+cos⁻¹x))</span>' },
+                        { ar: '<span class="math-display">-1/(2√(1+cos⁻¹x))</span>', en: '<span class="math-display">-1/(2√(1+cos⁻¹x))</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = 1+cos⁻¹x, u\' = -1/√(1-x²). f\'(x) = -1/(2√(1-x²)·√(1+cos⁻¹x))', en: 'f\'(x) = -1/(2√(1-x²)·√(1+cos⁻¹x))' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = (tan⁻¹x)². ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = (tan⁻¹x)². What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2tan⁻¹x/(1+x²)</span>', en: '<span class="math-display">2tan⁻¹x/(1+x²)</span>' },
+                        { ar: '<span class="math-display">tan⁻¹x/(1+x²)</span>', en: '<span class="math-display">tan⁻¹x/(1+x²)</span>' },
+                        { ar: '<span class="math-display">2/(1+x²)</span>', en: '<span class="math-display">2/(1+x²)</span>' },
+                        { ar: '<span class="math-display">2tan⁻¹x·(1+x²)</span>', en: '<span class="math-display">2tan⁻¹x·(1+x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = tan⁻¹x, f = u². f\'(x) = 2u·u\' = 2tan⁻¹x/(1+x²)', en: 'f\'(x) = 2tan⁻¹x/(1+x²)' }
+                }
+            ]
+        },
+        {
+            id: 'sec5',
+            title: { ar: '🔹 القسم 5: مسائل مركبة متقدمة (Q21-Q25)', en: '🔹 Section 5: Advanced Composite Problems (Q21-Q25)' },
+            questions: [
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(x)·cos⁻¹(x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(x)·cos⁻¹(x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">[cos⁻¹x - sin⁻¹x]/√(1-x²)</span>', en: '<span class="math-display">[cos⁻¹x - sin⁻¹x]/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">[cos⁻¹x + sin⁻¹x]/√(1-x²)</span>', en: '<span class="math-display">[cos⁻¹x + sin⁻¹x]/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'قاعدة الضرب: f\' = (1/√(1-x²))·cos⁻¹x + sin⁻¹x·(-1/√(1-x²)) = [cos⁻¹x - sin⁻¹x]/√(1-x²)', en: 'Product rule: f\' = [cos⁻¹x - sin⁻¹x]/√(1-x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = tan⁻¹(e^x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = tan⁻¹(e^x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">e^x/(1+e^(2x))</span>', en: '<span class="math-display">e^x/(1+e^(2x))</span>' },
+                        { ar: '<span class="math-display">1/(1+e^(2x))</span>', en: '<span class="math-display">1/(1+e^(2x))</span>' },
+                        { ar: '<span class="math-display">e^x/(1-e^(2x))</span>', en: '<span class="math-display">e^x/(1-e^(2x))</span>' },
+                        { ar: '<span class="math-display">1/(1+e^x)</span>', en: '<span class="math-display">1/(1+e^x)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = e^x, u\' = e^x. f\'(x) = e^x/(1+(e^x)²) = e^x/(1+e^(2x))', en: 'f\'(x) = e^x/(1+e^(2x))' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = ln(sin⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = ln(sin⁻¹x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">1/(sin⁻¹x·√(1-x²))</span>', en: '<span class="math-display">1/(sin⁻¹x·√(1-x²))</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">sin⁻¹x/√(1-x²)</span>', en: '<span class="math-display">sin⁻¹x/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">1/(sin⁻¹x)</span>', en: '<span class="math-display">1/(sin⁻¹x)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = sin⁻¹x, u\' = 1/√(1-x²). f\'(x) = u\'/u = 1/(sin⁻¹x·√(1-x²))', en: 'f\'(x) = 1/(sin⁻¹x·√(1-x²))' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(x) + cos⁻¹(x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(x) + cos⁻¹(x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">0</span>', en: '<span class="math-display">0</span>' },
+                        { ar: '<span class="math-display">2/√(1-x²)</span>', en: '<span class="math-display">2/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²)</span>', en: '<span class="math-display">1/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">-1/√(1-x²)</span>', en: '<span class="math-display">-1/√(1-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'sin⁻¹x + cos⁻¹x = π/2 (ثابت). إذن f\'(x) = 0', en: 'sin⁻¹x + cos⁻¹x = π/2 (constant). So f\'(x) = 0' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = e^(cos⁻¹x). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = e^(cos⁻¹x). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-e^(cos⁻¹x)/√(1-x²)</span>', en: '<span class="math-display">-e^(cos⁻¹x)/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">e^(cos⁻¹x)/√(1-x²)</span>', en: '<span class="math-display">e^(cos⁻¹x)/√(1-x²)</span>' },
+                        { ar: '<span class="math-display">-e^(cos⁻¹x)</span>', en: '<span class="math-display">-e^(cos⁻¹x)</span>' },
+                        { ar: '<span class="math-display">e^(cos⁻¹x)·√(1-x²)</span>', en: '<span class="math-display">e^(cos⁻¹x)·√(1-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = cos⁻¹x, u\' = -1/√(1-x²). f\'(x) = e^u·u\' = -e^(cos⁻¹x)/√(1-x²)', en: 'f\'(x) = -e^(cos⁻¹x)/√(1-x²)' }
+                }
+            ]
+        },
+        {
+            id: 'sec6',
+            title: { ar: '🔹 القسم 6: تطبيقات ومفاهيم (Q26-Q30)', en: '🔹 Section 6: Applications & Concepts (Q26-Q30)' },
+            questions: [
+                {
+                    q: { ar: '<strong>مفهوم:</strong> ما مجال الدالة sin⁻¹(x)؟', en: '<strong>Concept:</strong> What is the domain of sin⁻¹(x)?' },
+                    svg: svgGraphs.inverse_trig_formulas,
+                    options: [
+                        { ar: '<span class="math-display">[-1, 1]</span>', en: '<span class="math-display">[-1, 1]</span>' },
+                        { ar: '<span class="math-display">(-∞, ∞)</span>', en: '<span class="math-display">(-∞, ∞)</span>' },
+                        { ar: '<span class="math-display">[0, 1]</span>', en: '<span class="math-display">[0, 1]</span>' },
+                        { ar: '<span class="math-display">[-π/2, π/2]</span>', en: '<span class="math-display">[-π/2, π/2]</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'مجال sin⁻¹(x) هو [-1, 1] ومداه [-π/2, π/2]', en: 'Domain of sin⁻¹(x) is [-1, 1], range is [-π/2, π/2]' }
+                },
+                {
+                    q: { ar: '<strong>مفهوم:</strong> ما مجال الدالة tan⁻¹(x)؟', en: '<strong>Concept:</strong> What is the domain of tan⁻¹(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">(-∞, ∞)</span> (جميع الأعداد الحقيقية)', en: '<span class="math-display">(-∞, ∞)</span> (all real numbers)' },
+                        { ar: '<span class="math-display">[-1, 1]</span>', en: '<span class="math-display">[-1, 1]</span>' },
+                        { ar: '<span class="math-display">[0, ∞)</span>', en: '<span class="math-display">[0, ∞)</span>' },
+                        { ar: '<span class="math-display">(-π/2, π/2)</span>', en: '<span class="math-display">(--π/2, π/2)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'مجال tan⁻¹(x) هو جميع الأعداد الحقيقية (-∞, ∞)', en: 'Domain of tan⁻¹(x) is all real numbers (-∞, ∞)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = sin⁻¹(x/2). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = sin⁻¹(x/2). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">1/(2√(1-x²/4)) = 1/√(4-x²)</span>', en: '<span class="math-display">1/(2√(1-x²/4)) = 1/√(4-x²)</span>' },
+                        { ar: '<span class="math-display">1/√(1-x²/4)</span>', en: '<span class="math-display">1/√(1-x²/4)</span>' },
+                        { ar: '<span class="math-display">1/(2√(1-x²))</span>', en: '<span class="math-display">1/(2√(1-x²))</span>' },
+                        { ar: '<span class="math-display">x/(2√(1-x²/4))</span>', en: '<span class="math-display">x/(2√(1-x²/4))</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x/2, u\' = 1/2. f\'(x) = (1/2)/√(1-x²/4) = 1/√(4-x²)', en: 'f\'(x) = 1/√(4-x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = cos⁻¹(x/3). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = cos⁻¹(x/3). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">-1/√(9-x²)</span>', en: '<span class="math-display">-1/√(9-x²)</span>' },
+                        { ar: '<span class="math-display">1/√(9-x²)</span>', en: '<span class="math-display">1/√(9-x²)</span>' },
+                        { ar: '<span class="math-display">-1/(3√(1-x²/9))</span>', en: '<span class="math-display">-1/(3√(1-x²/9))</span>' },
+                        { ar: '<span class="math-display">-3/√(9-x²)</span>', en: '<span class="math-display">-3/√(9-x²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x/3, u\' = 1/3. f\'(x) = -(1/3)/√(1-x²/9) = -1/√(9-x²)', en: 'f\'(x) = -1/√(9-x²)' }
+                },
+                {
+                    q: { ar: '<strong>س مشابه:</strong> f(x) = tan⁻¹(x²+1). ما قيمة f\'(x)؟', en: '<strong>Similar:</strong> f(x) = tan⁻¹(x²+1). What is f\'(x)?' },
+                    options: [
+                        { ar: '<span class="math-display">2x/(1+(x²+1)²)</span>', en: '<span class="math-display">2x/(1+(x²+1)²)</span>' },
+                        { ar: '<span class="math-display">1/(1+(x²+1)²)</span>', en: '<span class="math-display">1/(1+(x²+1)²)</span>' },
+                        { ar: '<span class="math-display">2x/(1-(x²+1)²)</span>', en: '<span class="math-display">2x/(1-(x²+1)²)</span>' },
+                        { ar: '<span class="math-display">x/(1+(x²+1)²)</span>', en: '<span class="math-display">x/(1+(x²+1)²)</span>' }
+                    ],
+                    correct: 0,
+                    answer: { ar: 'u = x²+1, u\' = 2x. f\'(x) = 2x/(1+(x²+1)²)', en: 'f\'(x) = 2x/(1+(x²+1)²)' }
+                }
+            ]
+        }
+    ]
+};
+
+function shuffleArray(array) {
+    const arr = [...array];
+    for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(rng() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+    }
+    return arr;
+}
+
+function prepareShuffledExam() {
+    rng = mulberry32(currentSeed);
+    examData = JSON.parse(JSON.stringify(originalExamData));
+    correctAnswersMap = {};
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        section.questions = shuffleArray(section.questions);
+        section.questions.forEach((q) => {
+            const optionsWithCorrect = q.options.map((opt, idx) => ({ option: opt, isCorrect: idx === q.correct }));
+            const shuffledOptions = shuffleArray(optionsWithCorrect);
+            q.options = shuffledOptions.map(o => o.option);
+            q.correct = shuffledOptions.findIndex(o => o.isCorrect);
+            correctAnswersMap[globalIdx] = String.fromCharCode(97 + q.correct);
+            globalIdx++;
+        });
+    });
+}
+
+function reshuffleExam() {
+    const msg = currentLang === 'ar' ? '🔄 سيتم إنشاء أسئلة جديدة ومسح إجاباتك. هل أنت متأكد؟' : '🔄 New questions will be generated. Are you sure?';
+    if (confirm(msg)) {
+        currentSeed = Date.now(); timeRemaining = TOTAL_TIME; answersVisible = false;
+        prepareShuffledExam(); renderExam(); saveState();
+        alert(currentLang === 'ar' ? '🎲 تم تغيير الأسئلة! حظاً موفقاً! 🍀' : '🎲 Questions changed! Good luck! 🍀');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+}
+
+function setLanguage(lang) {
+    currentLang = lang;
+    document.documentElement.lang = lang;
+    document.documentElement.dir = lang === 'ar' ? 'rtl' : 'ltr';
+    document.getElementById('btn-ar').classList.toggle('active', lang === 'ar');
+    document.getElementById('btn-en').classList.toggle('active', lang === 'en');
+    document.body.classList.toggle('en-mode', lang === 'en');
+    renderExam(); saveState(false);
+}
+
+function renderExam() {
+    const container = document.getElementById('exam-content');
+    const labels = { ar: { option: ['أ', 'ب', 'ج', 'د'], answer: '✅ الإجابة:' }, en: { option: ['A', 'B', 'C', 'D'], answer: '✅ Answer:' } };
+    const lbl = labels[currentLang];
+    let html = '';
+    let globalIdx = 0;
+    
+    examData.sections.forEach((section, secIdx) => {
+        const badgeClass = ['module-1', 'module-2', 'module-3', 'module-4', 'module-5', 'module-6'][secIdx];
+        html += '<section class="bg-white p-6 rounded-2xl shadow-lg border-2 border-amber-100">';
+        html += '<div class="text-center mb-4"><span class="module-badge ' + badgeClass + '">' + section.title[currentLang] + '</span></div>';
+        html += '<ol class="space-y-4 text-sm">';
+        
+        section.questions.forEach((q) => {
+            html += '<li class="border-r-4 border-amber-400 pr-4 py-2" id="q-' + globalIdx + '">';
+            html += '<strong class="text-amber-700">' + (globalIdx + 1) + '.</strong> ' + q.q[currentLang] + '<br>';
+            if (q.svg) html += '<div class="graph-container">' + q.svg + '</div>';
+            
+            q.options.forEach((opt, oIdx) => {
+                html += '<label class="cursor-pointer block mt-2 mr-4 hover:bg-amber-50 rounded-lg p-2 transition">';
+                html += '<input type="radio" name="q' + globalIdx + '" value="' + String.fromCharCode(97 + oIdx) + '" class="mr-2 ml-2">';
+                html += '<span class="arabic-math">' + lbl.option[oIdx] + ') ' + opt[currentLang] + '</span>';
+                html += '</label>';
+            });
+            
+            html += '<div class="answer-box text-green-700 mt-3 font-medium ' + (answersVisible ? '' : 'hidden') + ' bg-green-50 rounded-lg p-3 border border-green-200">';
+            html += lbl.answer + ' ' + lbl.option[q.correct] + ') <span class="arabic-math">' + q.options[q.correct][currentLang] + '</span><br>';
+            html += '<span class="text-sm text-green-700 mt-2 block arabic-math">' + q.answer[currentLang] + '</span>';
+            html += '</div></li>';
+            globalIdx++;
+        });
+        
+        html += '</ol></section>';
+    });
+    
+    container.innerHTML = html;
+}
+
+function startTimer() {
+    updateTimerDisplay();
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        updateTimerDisplay();
+        if (timeRemaining % 60 === 0) saveState(false);
+        if (timeRemaining <= 600) document.getElementById('timer').classList.add('timer-warning');
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            alert(currentLang === 'ar' ? "⏰ انتهى الوقت!" : "⏰ Time's up!");
+            gradeExam();
+        }
+    }, 1000);
+}
+
+function updateTimerDisplay() {
+    const m = Math.floor(timeRemaining / 60);
+    const s = timeRemaining % 60;
+    document.getElementById('timer').textContent = m.toString().padStart(2,'0') + ':' + s.toString().padStart(2,'0');
+}
+
+function toggleAnswers() {
+    answersVisible = !answersVisible;
+    document.querySelectorAll('.answer-box').forEach(el => el.classList.toggle('hidden', !answersVisible));
+    saveState(false);
+}
+
+function gradeExam() {
+    let correctCount = 0;
+    const sectionScores = new Array(TOTAL_SECTIONS).fill(0);
+    
+    for (let i = 0; i < TOTAL_QUESTIONS; i++) {
+        const sel = document.querySelector('input[name="q'+i+'"]:checked');
+        const li = document.getElementById('q-' + i);
+        if (li) {
+            const isCorrect = sel && sel.value === correctAnswersMap[i];
+            if (isCorrect) {
+                correctCount++;
+                li.classList.add('correct');
+                li.classList.remove('incorrect');
+                sectionScores[Math.floor(i / QUESTIONS_PER_SECTION)]++;
+            } else {
+                li.classList.add('incorrect');
+                li.classList.remove('correct');
+            }
+        }
+    }
+    
+    const score = Math.round((correctCount / TOTAL_QUESTIONS) * 100);
+    document.getElementById('res-total').textContent = score + ' / 100';
+    document.getElementById('res-name').textContent = document.getElementById('studentName').value || (currentLang === 'ar' ? 'بطل' : 'Champion');
+    document.getElementById('res-date').textContent = new Date().toLocaleDateString(currentLang === 'ar' ? 'ar-AE' : 'en-US');
+    
+    const pc = document.getElementById('sections-performance');
+    pc.innerHTML = '';
+    examData.sections.forEach((s, idx) => {
+        pc.innerHTML += '<div class="flex justify-between items-center p-3 bg-white rounded-lg"><span class="text-gray-700">' + s.title[currentLang] + '</span><span class="font-bold text-amber-700">' + sectionScores[idx] + '/' + QUESTIONS_PER_SECTION + '</span></div>';
+    });
+    
+    const badge = document.getElementById('success-badge');
+    document.getElementById('success-percent').textContent = score + '%';
+    
+    if (currentLang === 'ar') {
+        if (score >= 90) { badge.textContent = '🌟 ممتاز جداً!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 ممتاز!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 جيد'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 حاول مرة أخرى'; badge.className = 'success-badge grade-fail'; }
+    } else {
+        if (score >= 90) { badge.textContent = '🌟 Outstanding!'; badge.className = 'success-badge grade-excellent'; }
+        else if (score >= 75) { badge.textContent = '👏 Excellent!'; badge.className = 'success-badge grade-good'; }
+        else if (score >= 50) { badge.textContent = '👍 Good'; badge.className = 'success-badge grade-pass'; }
+        else { badge.textContent = '💪 Try Again'; badge.className = 'success-badge grade-fail'; }
+    }
+    
+    document.getElementById('results-panel').classList.remove('hidden');
+    document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+    if (timerInterval) clearInterval(timerInterval);
+}
+
+function sendResultsToEmail() {
+    const btn = document.getElementById('sendEmailBtn');
+    const status = document.getElementById('emailStatus');
+    btn.disabled = true;
+    btn.textContent = currentLang === 'ar' ? '⏳ جاري الإرسال...' : '⏳ Sending...';
+    
+    const name = document.getElementById('studentName').value || 'غير محدد';
+    const studentClass = document.getElementById('studentClass').value || 'غير محدد';
+    const date = document.getElementById('examDate').value || new Date().toLocaleDateString();
+    const score = document.getElementById('res-total').textContent;
+    const successRate = document.getElementById('success-percent').textContent;
+    const badge = document.getElementById('success-badge').textContent;
+    
+    let questionsHTML = '<div style="font-family:Arial; direction:rtl;">';
+    questionsHTML += '<h2>📐 ' + (currentLang === 'ar' ? 'نتيجة امتحان المشتقات المثلثية العكسية' : 'Inverse Trig Derivatives Exam Result') + '</h2>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الاسم' : 'Name') + ':</strong> ' + name + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الشعبة' : 'Class') + ':</strong> ' + studentClass + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التاريخ' : 'Date') + ':</strong> ' + date + '</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'الدرجة' : 'Score') + ':</strong> ' + score + ' (' + successRate + '%)</p>';
+    questionsHTML += '<p><strong>' + (currentLang === 'ar' ? 'التقدير' : 'Grade') + ':</strong> ' + badge + '</p>';
+    questionsHTML += '<hr><h3>' + (currentLang === 'ar' ? 'تفاصيل الإجابات:' : 'Answer Details:') + '</h3><table style="width:100%; border-collapse:collapse;">';
+    questionsHTML += '<tr style="background:#d97706; color:white;"><th style="padding:8px; border:1px solid #ddd;">#</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'السؤال' : 'Question') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'إجابة الطالب' : 'Student Answer') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'الصحيحة' : 'Correct') + '</th><th style="padding:8px; border:1px solid #ddd;">' + (currentLang === 'ar' ? 'النتيجة' : 'Result') + '</th></tr>';
+    
+    let globalIdx = 0;
+    examData.sections.forEach((section) => {
+        questionsHTML += '<tr style="background:#fef3c7;"><td colspan="5" style="padding:8px; font-weight:bold; border:1px solid #ddd;">' + section.title.ar + '</td></tr>';
+        section.questions.forEach((q) => {
+            const sel = document.querySelector('input[name="q'+globalIdx+'"]:checked');
+            const sv = sel ? sel.value : null;
+            const cv = correctAnswersMap[globalIdx];
+            const ic = sv === cv;
+            let sat = currentLang === 'ar' ? '❌ لم يجب' : '❌ No answer';
+            let sac = '#dc2626';
+            if (sv) {
+                const si = sv.charCodeAt(0) - 97;
+                sat = q.options[si][currentLang];
+                sac = ic ? '#16a34a' : '#dc2626';
+            }
+            const cat = q.options[q.correct][currentLang];
+            const rb = ic ? '#f0fdf4' : '#fef2f2';
+            questionsHTML += '<tr style="background:' + rb + ';"><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (globalIdx+1) + '</td><td style="padding:8px; border:1px solid #ddd;">' + q.q.ar.replace(/<[^>]+>/g, '') + '</td><td style="padding:8px; border:1px solid #ddd; color:' + sac + ';">' + sat + '</td><td style="padding:8px; border:1px solid #ddd; color:#16a34a;">' + cat + '</td><td style="padding:8px; border:1px solid #ddd; text-align:center;">' + (ic?'✅':'❌') + '</td></tr>';
+            globalIdx++;
+        });
+    });
+    questionsHTML += '</table></div>';
+    
+    const templateParams = {
+        to_email: TARGET_EMAIL,
+        student_name: name,
+        student_class: studentClass,
+        exam_date: date,
+        total_score: score,
+        success_rate: successRate,
+        grade: badge,
+        answers_table: questionsHTML
+    };
+    
+    emailjs.send(SERVICE_ID, TEMPLATE_ID, templateParams)
+        .then(() => {
+            status.textContent = currentLang === 'ar' ? '✅ تم الإرسال بنجاح!' : '✅ Sent successfully!';
+            status.style.color = '#16a34a';
+            btn.textContent = currentLang === 'ar' ? '✓ تم' : '✓ Sent';
+            alert(currentLang === 'ar' ? 'تم إرسال النتيجة للمعلم بنجاح!' : 'Result sent to teacher successfully!');
+        })
+        .catch((error) => {
+            status.textContent = currentLang === 'ar' ? '❌ فشل الإرسال' : '❌ Failed to send';
+            status.style.color = '#dc2626';
+            btn.disabled = false;
+            btn.textContent = currentLang === 'ar' ? '📧 حاول مرة أخرى' : '📧 Try Again';
+            alert(currentLang === 'ar' ? 'فشل الإرسال: ' + error.text : 'Failed: ' + error.text);
+        });
+}
+
+window.addEventListener('DOMContentLoaded', () => {
+    const saved = loadState();
+    if (saved && saved.seed) {
+        currentSeed = saved.seed;
+        currentLang = saved.lang || 'ar';
+        timeRemaining = saved.timeRemaining !== undefined ? saved.timeRemaining : TOTAL_TIME;
+        answersVisible = saved.answersVisible || false;
+        document.getElementById('btn-ar').classList.toggle('active', currentLang === 'ar');
+        document.getElementById('btn-en').classList.toggle('active', currentLang === 'en');
+        document.body.classList.toggle('en-mode', currentLang === 'en');
+    } else {
+        currentSeed = Date.now();
+    }
+    prepareShuffledExam();
+    renderExam();
+    if (saved) {
+        if (saved.studentName) document.getElementById('studentName').value = saved.studentName;
+        if (saved.studentClass) document.getElementById('studentClass').value = saved.studentClass;
+        if (saved.examDate) document.getElementById('examDate').value = saved.examDate;
+        if (saved.answers) restoreAnswers(saved.answers);
+    }
+    setupAnswerListeners();
+    setupInputListeners();
+    startTimer();
+});
+window.addEventListener('beforeunload', () => saveState(false));
+</script>
+</body>
+</html>
